@@ -57,6 +57,7 @@ SRC = ./ft_strrchr.c \
 ./ft_isascii.c \
 ./ft_strlen.c \
 ./ft_strsub.c \
+./ft_expandpad.c \
 ./ft_strnew.c \
 ./ft_memalloc.c \
 ./ft_putendl.c \

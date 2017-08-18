@@ -15,15 +15,16 @@
 NAME = libftprintf.a 
 LIBFT_DIR = libft/
 LIBFT_BIN = $(LIBFT_DIR)libft.a 
-CFLAGS = -g -Wall -Werror -Wextra -I includes -I libft/includes
+CFLAGS = -g -Wall -Werror -Wextra -I includes -I libft/includes -I libft/includes
 
 SRC = modules/parse_module.c \
 modules/bufferwrite_module.c \
 modules/integer_module.c \
+modules/format_module.c \
 modules/memes_module.c \
 src/ft_printf.c \
 src/module_manager.c \
-
+ 
 OBJ = $(subst .c,.o, $(SRC))
 
 # ------------------- Targets ----------------------- #
@@ -47,4 +48,6 @@ fclean: clean
 	/bin/rm -f $(NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 	
-re: clean all
+re: clean all 
+symbolmaker: $(NAME)
+	find libft -type f -name "*.c" | grep -E "$$(nm -g libftprintf.a | grep -oE "(ft_.+)" | grep -v ft_printf | tr '\n' '|'| sed -e 's/.$$//g')" > symbolincludes.txt

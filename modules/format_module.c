@@ -5,102 +5,112 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/08/14 16:20:41 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/15 00:52:52 by jkrause          ###   ########.fr       */
+/*   Created: 2017/08/15 22:43:59 by jkrause           #+#    #+#             */
+/*   Updated: 2017/08/17 23:38:19 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-/*
-** TODO: Determine the value of this function later..
-*/
-char				*prepend(char *orig, char *prepend, int opposite)
+char				*prefix(t_input *in, char *result, int *bsize)
 {
-	char 				*result;
+	char				*tmp;
 
-	if (opposite)
-		result = ft_strjoin(orig, prepend);
-	else
-		result = ft_strjoin(prepend, orig);
-	if (orig)
-		free(orig);
-	if (prepend)
-		free(prepend);
+	tmp = 0;
+	if (in->length_extended == 4)
+		result = ft_expandwrite("-", 1, result, bsize);
+	else if (in->module == 'i' && in->flag_all_signs_char != 0)
+	{
+		tmp = ft_strnew(1);
+		tmp[0] = in->flag_all_signs_char;
+		result = ft_expandwrite(tmp, 1, result, bsize);
+	}
+	else if (in->module == 'i' && in->flag_alt_mode && LC(in->type, 'x'))
+		result = ft_expandwrite("0x", 2, result, bsize);
+	if (tmp)
+		free(tmp);
 	return (result);
 }
 
-char				*ppadding(t_input *input, char *result, int isnum)
+int					prefixstr(t_input *in)
+{
+	int					rsize;
+	char				*result;
+
+	result = 0;
+	rsize = 0;
+	result = prefix(in, result, &rsize);
+	free(result);
+	return (rsize);
+}
+
+char				*precise(t_input *in, char *str, char *result, int *bsize)
 {
 	int					precision;
-	char				*tmp;
+	int					length;
 
-	precision = (input->precision == -1 && isnum ? 1 : input->precision);
-	if (precision == 0 && ((isnum && *result == '0') || !isnum))
+	length = ft_strlen(str);
+	precision = (in->precision == INT_MIN ? INT_MIN : in->precision);
+	if (precision != INT_MIN)
 	{
-		free(result);
-		return (0);
-	}
-	if (precision == -1 || (precision == 1 && isnum))
-		return (result);
-	precision = input->precision - ft_strlen(result);
-	if (!isnum && precision < 0)
-		result[precision] = '\0';
-	else if (precision > 0)
-	{
-		tmp = ft_memalloc(precision);
-		ft_memset(tmp, '0', precision);
-		result = prepend(result, tmp, 0);
-	}
-	return (result);
-}
-
-char				*wpadding(t_input *input, char *result, int isnum)
-{
-	char				*tmp;
-	int					len;
-	int					width;
-
-	if (!result)
-		return (0);
-	len = ft_strlen(result);
-	width = input->width - len;
-	if (len == 0)
-		return (result);
-	if (width > 0)
-	{
-		tmp = ft_memalloc(width);
-		if (!input->flag_left_justify && isnum && input->flag_zero_pad
-				&& input->precision == -1)
-			ft_memset(tmp, '0', width);
+		if (precision <= 0 && in->module != 'i')
+		{
+		//	printf("Condition 1\n");
+			result = prefix(in, result, bsize);
+			length = precision + length;
+		}
+		else if (precision > 0 && in->module == 'i')
+		{
+		//	printf("Condition 2\n");
+			result = prefix(in, result, bsize);
+			result = ft_expandpad('0', precision, result, bsize);
+		}
 		else
-			ft_memset(tmp, ' ', width);
-		result = prepend(result, tmp, (input->flag_left_justify ? 1 : 0));
+			result = prefix(in, result, bsize);
 	}
+	else
+		result = prefix(in, result, bsize);
+	result = ft_expandwrite(str, length, result, bsize);
 	return (result);
 }
 
-/*
-char				*prefix(t_input *input, char *result)
+char				*width(t_input *in, char *str, char *result, int *bsize)
 {
+	int					width;
+	int					length;
 
-}*/
+	length = prefixstr(in) + (in->precision > 0 ? in->precision : 0)
+			+ ft_strlen(str);
+	width = in->width - length;
+	if (width > 0 && !in->flag_left_justify
+			&& in->precision == INT_MIN
+			&& in->flag_zero_pad && in->module == 'i')
+		result = ft_expandpad('0', width, result, bsize);
+	else if (width > 0)
+		result = ft_expandpad(' ', width, result, bsize);
+	return (result);
+}
 
 int					format_module(t_input *input, char *str)
 {
 	char				*result;
-	int					isnum;
+	int					bsize;
 
-	result = str;
-	isnum = 0;
-	if (LC(input->type, 'd') || LC(input->type, 'i') || LC(input->type, 'x') ||
-			LC(input->type, 'u') || LC(input->type, 'o'))
-		isnum = 1;
-	
-	if (!(LC(input->type, 'c')))
-		result = ppadding(input, result, isnum);
-	result = wpadding(input, result, isnum);
-	if (result)
-		write_module(result, 1);
+	result = 0;
+	bsize = 0;
+	if (input->precision != INT_MIN)
+		input->precision -= ft_strlen(str);
+	if (input->flag_left_justify)
+	{
+		result = precise(input, str, result, &bsize);
+		result = width(input, str, result, &bsize);
+	}
+	else
+	{
+		result = width(input, str, result, &bsize);
+		result = precise(input, str, result, &bsize);
+	}
+	result = ft_expandwrite("\0", 1, result, &bsize);
+	write_module(result, 1);
 	return (1);
 }

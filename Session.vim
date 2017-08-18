@@ -8,89 +8,26 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
 endif
 set shortmess=aoO
 badd +56 includes/ft_printf.h
-badd +46 Makefile.m4
-badd +18 src/ft_printf.c
+badd +48 Makefile.m4
+badd +1 src/ft_printf.c
 badd +1 test.c
 badd +25 src/module_manager.c
-badd +80 modules/parse_module.c
 badd +31 modules/bufferwrite_module.c
-badd +0 libft/ft_ltostr_base.c
-badd +0 ft_ltostr.c
-badd +62 libft/ft_itoa_base.c
-badd +0 modules/integer_module.c
-badd +0 modules/memes_module.c
-badd +0 pointer-print.c
+badd +1 libft/ft_ltostr_base.c
+badd +1 ft_ltostr.c
+badd +45 modules/integer_module.c
+badd +1 modules/memes_module.c
+badd +1 pointer-print.c
+badd +1 modules/parse_module.c
+badd +86 modules/format_module.c
+badd +0 libft/ft_memset.c
+badd +23 libft/ft_expandpad.c
+badd +108 libft/includes/libft.h
 argglobal
 silent! argdel *
-argadd modules/memes_module.c
+argadd libft/ft_expandpad.c
 set stal=2
-edit Makefile.m4
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winminheight=1 winminwidth=1 winheight=1 winwidth=1
-argglobal
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 2 - ((1 * winheight(0) + 40) / 80)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-2
-normal! 081|
-tabedit includes/ft_printf.h
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winminheight=1 winminwidth=1 winheight=1 winwidth=1
-argglobal
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 94 - ((79 * winheight(0) + 40) / 80)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-94
-normal! 0
-tabedit src/module_manager.c
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winminheight=1 winminwidth=1 winheight=1 winwidth=1
-argglobal
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 40) / 80)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-1
-normal! 081|
-tabedit test.c
+edit src/ft_printf.c
 set splitbelow splitright
 wincmd _ | wincmd |
 split
@@ -100,8 +37,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winminheight=1 winminwidth=1 winheight=1 winwidth=1
-exe '1resize ' . ((&lines * 39 + 41) / 83)
-exe '2resize ' . ((&lines * 40 + 41) / 83)
+exe '1resize ' . ((&lines * 28 + 39) / 78)
+exe '2resize ' . ((&lines * 46 + 39) / 78)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -112,15 +49,16 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 31 - ((30 * winheight(0) + 19) / 39)
+let s:l = 75 - ((24 * winheight(0) + 14) / 28)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-31
-normal! 046|
+75
+normal! 0
+lcd ~/Documents/42/ft_printf
 wincmd w
 argglobal
-edit src/ft_printf.c
+edit ~/Documents/42/ft_printf/Makefile.m4
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -130,16 +68,17 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 43 - ((30 * winheight(0) + 20) / 40)
+let s:l = 44 - ((12 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-43
-normal! 022|
+44
+normal! 017|
+lcd ~/Documents/42/ft_printf
 wincmd w
-exe '1resize ' . ((&lines * 39 + 41) / 83)
-exe '2resize ' . ((&lines * 40 + 41) / 83)
-tabedit modules/bufferwrite_module.c
+exe '1resize ' . ((&lines * 28 + 39) / 78)
+exe '2resize ' . ((&lines * 46 + 39) / 78)
+tabedit ~/Documents/42/ft_printf/includes/ft_printf.h
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -155,46 +94,19 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 36 - ((35 * winheight(0) + 40) / 80)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-36
-normal! 042|
-tabedit modules/parse_module.c
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winminheight=1 winminwidth=1 winheight=1 winwidth=1
-argglobal
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 78 - ((41 * winheight(0) + 40) / 80)
+let s:l = 78 - ((25 * winheight(0) + 45) / 91)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 78
-normal! 058|
-tabedit ft_ltostr.c
+normal! 0
+lcd ~/Documents/42/ft_printf
+tabedit ~/Documents/42/ft_printf/src/module_manager.c
 set splitbelow splitright
-wincmd _ | wincmd |
-split
-1wincmd k
-wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
 set winminheight=1 winminwidth=1 winheight=1 winwidth=1
-exe '1resize ' . ((&lines * 40 + 41) / 83)
-exe '2resize ' . ((&lines * 39 + 41) / 83)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -205,45 +117,19 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 66 - ((0 * winheight(0) + 20) / 40)
+let s:l = 24 - ((23 * winheight(0) + 45) / 91)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-66
-normal! 06|
-wincmd w
-argglobal
-edit libft/ft_ltostr_base.c
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 61 - ((0 * winheight(0) + 19) / 39)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-61
-normal! 010|
-wincmd w
-exe '1resize ' . ((&lines * 40 + 41) / 83)
-exe '2resize ' . ((&lines * 39 + 41) / 83)
-tabedit test.c
+24
+normal! 036|
+lcd ~/Documents/42/ft_printf
+tabedit ~/Documents/42/ft_printf/modules/integer_module.c
 set splitbelow splitright
-wincmd _ | wincmd |
-split
-1wincmd k
-wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
 set winminheight=1 winminwidth=1 winheight=1 winwidth=1
-exe '1resize ' . ((&lines * 39 + 41) / 83)
-exe '2resize ' . ((&lines * 40 + 41) / 83)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -254,15 +140,49 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 27 - ((26 * winheight(0) + 19) / 39)
+let s:l = 58 - ((46 * winheight(0) + 37) / 75)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+58
+normal! 05|
+lcd ~/Documents/42/ft_printf
+tabedit ~/Documents/42/ft_printf/modules/bufferwrite_module.c
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=1 winminwidth=1 winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 27 - ((21 * winheight(0) + 37) / 75)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 27
-normal! 027|
+normal! 05|
+lcd ~/Documents/42/ft_printf
+tabedit ~/Documents/42/ft_printf/libft/ft_ltostr_base.c
+set splitbelow splitright
+wincmd _ | wincmd |
+split
+1wincmd k
 wincmd w
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=1 winminwidth=1 winheight=1 winwidth=1
+exe '1resize ' . ((&lines * 39 + 39) / 78)
+exe '2resize ' . ((&lines * 51 + 39) / 78)
 argglobal
-edit modules/integer_module.c
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -272,16 +192,87 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 40 - ((27 * winheight(0) + 20) / 40)
+let s:l = 82 - ((29 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-40
-normal! 021|
+82
+normal! 025|
+lcd ~/Documents/42/ft_printf
 wincmd w
-exe '1resize ' . ((&lines * 39 + 41) / 83)
-exe '2resize ' . ((&lines * 40 + 41) / 83)
-tabedit pointer-print.c
+argglobal
+edit ~/Documents/42/ft_printf/ft_ltostr.c
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 10 - ((0 * winheight(0) + 25) / 51)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+10
+normal! 0
+lcd ~/Documents/42/ft_printf
+wincmd w
+exe '1resize ' . ((&lines * 39 + 39) / 78)
+exe '2resize ' . ((&lines * 51 + 39) / 78)
+tabedit ~/Documents/42/ft_printf/test.c
+set splitbelow splitright
+wincmd _ | wincmd |
+split
+1wincmd k
+wincmd w
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=1 winminwidth=1 winheight=1 winwidth=1
+exe '1resize ' . ((&lines * 27 + 39) / 78)
+exe '2resize ' . ((&lines * 47 + 39) / 78)
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 39 - ((17 * winheight(0) + 13) / 27)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+39
+normal! 06|
+lcd ~/Documents/42/ft_printf
+wincmd w
+argglobal
+edit ~/Documents/42/ft_printf/modules/integer_module.c
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 41 - ((40 * winheight(0) + 23) / 47)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+41
+normal! 0
+lcd ~/Documents/42/ft_printf
+wincmd w
+exe '1resize ' . ((&lines * 27 + 39) / 78)
+exe '2resize ' . ((&lines * 47 + 39) / 78)
+tabedit ~/Documents/42/ft_printf/modules/parse_module.c
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -297,13 +288,14 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 221 - ((46 * winheight(0) + 40) / 80)
+let s:l = 92 - ((59 * winheight(0) + 45) / 91)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-221
-normal! 022|
-tabedit modules/memes_module.c
+92
+normal! 029|
+lcd ~/Documents/42/ft_printf
+tabedit ~/Documents/42/ft_printf/pointer-print.c
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -319,13 +311,60 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 20 - ((19 * winheight(0) + 40) / 80)
+let s:l = 127 - ((51 * winheight(0) + 45) / 91)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-20
-normal! 034|
-tabnext 6
+127
+normal! 017|
+lcd ~/Documents/42/ft_printf
+tabedit ~/Documents/42/ft_printf/modules/memes_module.c
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=1 winminwidth=1 winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 19 - ((14 * winheight(0) + 37) / 75)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+19
+normal! 0
+lcd ~/Documents/42/ft_printf
+tabedit ~/Documents/42/ft_printf/modules/format_module.c
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=1 winminwidth=1 winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 79 - ((0 * winheight(0) + 37) / 75)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+79
+normal! 0
+lcd ~/Documents/42/ft_printf
+tabnext 11
 set stal=1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

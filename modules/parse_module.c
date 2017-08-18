@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/25 14:27:21 by jkrause           #+#    #+#             */
-/*   Updated: 2017/07/31 23:07:38 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/17 16:12:59 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,21 @@ void				check_widthcision(t_input *input, char **fmt)
 	{
 		if (fc == '.')
 		{
-			if (input->width != -1)
-				break;
 			input->width = tmp;
 			input->precision = 0;
+			tmp = 0;
 			if (*(*fmt + 1) < '0' || *(*fmt + 1) > '9')
 				return (void)(*fmt += 1);
 		}
 		else
-			tmp = fc - '0';
+			tmp += fc - '0';
 		if (*(*fmt + 1) >= '0' && *(*fmt + 1) <= '9')
 			tmp *= 10;
 		*fmt += 1;
 		fc = **fmt;
 	}
-	input->width != -1 ? input->precision = tmp : 0;
-	input->width == -1 ? input->width = tmp : 0;
+	input->width != INT_MIN ? input->precision = tmp : 0;
+	input->width == INT_MIN ? input->width = tmp : 0;
 }
 
 void				check_length(t_input *input, char **fmt)
@@ -89,10 +88,10 @@ int					parse_module(t_input *input, void *ptr)
 	char				*fmt;
 
 	alpha = "sSpdDioOuUxXcC%";
-	input->width = -1;
-	input->precision = -1;
-	fmt = (char*)ptr;
-	fmt += 1;
+	input->width = INT_MIN;
+	input->precision = INT_MIN;
+	input->module = 0;
+	fmt = (char*)ptr + 1;
 	check_flags(input, &fmt);
 	check_widthcision(input, &fmt);
 	check_length(input, &fmt);

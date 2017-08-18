@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/18 11:15:43 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/01 00:15:20 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/17 23:33:41 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int					ft_printf(const char *fmt, ...)
 	va_start(start, fmt);
 	while ((iflag = search(current)) != 0)
 	{
-		onpoint_isa_debug(iflag);
+	//	onpoint_isa_debug(iflag);
 		write_module(ft_strsub(current, 0, (iflag->original - current)), 1);
 		if (iflag->error || !module_call(iflag->type, iflag, &start))
 		{

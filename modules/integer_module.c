@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/31 14:23:49 by jkrause           #+#    #+#             */
-/*   Updated: 2017/07/31 23:30:26 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/17 20:23:08 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void				*magic_convert(t_input *input, void *arg, int sign)
 	void			*casted;
 
 	number = (t_magicnum)arg;
-	printf("DEBUG: %ld\n", (long)arg);
 	if (CMP(input->length, 'l') || CMP(input->length, 't'))
 		casted = (void*)(number.magic);
 	else if (CMP(input->length, 'h') && !sign)
@@ -44,22 +43,27 @@ int					integer_conv(t_input *input, va_list ptr,
 						int base, char *alpha)
 {
 	char			*buffer;
-	void			*cancerfleetmakesmecancer;
+	void			*number;
 	int				sign;
 
 	sign = 1;
 	if (input->type != 'd' && input->type != 'i'
 			&& input->type != 'D' && input->type != 'I')
 		sign = 0;
-	cancerfleetmakesmecancer = magic_convert(input, va_arg(ptr, void*), sign);
-	printf("DEBUG_CASTED: %lu\n", (unsigned long)cancerfleetmakesmecancer);
+	number = magic_convert(input, va_arg(ptr, void*), sign);
 	if (CMP(input->type, 'u') || base != 10)
-	{
-		printf("PLS?\n");
 		sign = 0;
+	buffer = ft_ltostr_base(number, base, alpha, sign);
+	input->module = 'i';
+	if (buffer[0] == '-')
+	{
+		input->length_extended = 4;
+		module_call(FORMATMODULE_FORMAT, input, buffer + 1);
 	}
-	buffer = ft_ltostr_base(cancerfleetmakesmecancer, base, alpha, sign);
-	write_module(buffer, 1);
+	else
+		module_call(FORMATMODULE_FORMAT, input, buffer);
+	free(buffer);
+	//write_module(buffer, 1);
 	return (1);
 }
 
@@ -71,6 +75,8 @@ int					integer_module(t_input *input, va_list *vaptr)
 		return (integer_conv(input, *vaptr, 10, "0123456789abcdef"));
 	else if (CMP(input->type, 'x'))
 		return (integer_conv(input, *vaptr, 16, "0123456789abcdef"));
+	else if (CMP(input->type, 'X'))
+		return (integer_conv(input, *vaptr, 16, "0123456789ABCDEF"));
 	else if (CMP(input->type, 'o'))
 		return (integer_conv(input, *vaptr, 8, "0123456789abcdef"));
 	return (0);

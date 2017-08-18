@@ -1,0 +1,3 @@
+*.o
+ft_printf
+format_module_old

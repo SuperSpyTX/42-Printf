@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/18 17:16:16 by jkrause           #+#    #+#             */
-/*   Updated: 2017/07/31 23:20:28 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/14 23:41:05 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void					module_init()
 		g_modules[WRITEMODULE_WRITE] = (t_module)bufferwrite_module_write;
 		g_modules[WRITEMODULE_FLUSH] = (t_module)bufferwrite_module_flush;
 		g_modules[PARSEMODULE_PARSE] = (t_module)parse_module;
+		g_modules[FORMATMODULE_FORMAT] = (t_module)format_module;
 		module_init2();
 	}
 }

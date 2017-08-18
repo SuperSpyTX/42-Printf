@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/06 20:58:23 by jkrause           #+#    #+#             */
-/*   Updated: 2017/07/31 18:44:30 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/17 18:27:02 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,4 +121,6 @@ t_no				*ft_no(void *anything);
 char				*ft_strnchr(const char *s, int c, size_t size);
 char				*ft_ltostr_base(void *value, int base,
 						char *alpha, int sign);
+char				*ft_expandpad(char c, int repeat,
+						char *result, int *bsize);
 #endif

@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/22 14:08:19 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/01 00:14:23 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/02 17:06:54 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ int				main(int argc, char **argv)
 {
 	(void)argc;
 	(void)argv;
-	
+
 	//printf("%C\n", 'c');
 	//printf("FTOA: %s\n", ft_ftoa(, 5));
 	/*

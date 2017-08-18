@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/18 10:26:16 by jkrause           #+#    #+#             */
-/*   Updated: 2017/07/31 22:51:15 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/17 14:54:29 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdarg.h>
+# include <limits.h>
 # include "libft.h"
 
 /*
@@ -23,7 +24,7 @@
 */
 
 # define CMP(x, y) x == y
-
+# define LC(x, y) x == y || x == y - 32
 /*
 ** Configuration (yes, you can change this via command line!)
 ** With -DMACRO=value
@@ -41,6 +42,7 @@
 # define WRITEMODULE_WRITE 0
 # define WRITEMODULE_FLUSH 1
 # define PARSEMODULE_PARSE 2
+# define FORMATMODULE_FORMAT 3
 
 /*
 ** Union for magic numbers.  Will make conversion for ft_ltostr_base easy.
@@ -64,17 +66,11 @@ typedef union 		u_magicnum
 	void			*magic;
 }					t_magicnum;
 
-/*
-** Modules (& Flags)
-** TODO: I do not like that I'm having to pass the static pointer
-** through the input struct, but it's the only way currently I can
-** think of.  I need to come up with a better solution..
-*/
-
 typedef struct		s_input
 {
 	int				error;
 	int				input_length;
+	char			module;
 	char			*original;
 
 	int				flag_left_justify;
@@ -93,6 +89,7 @@ int					bufferwrite_module_flush(t_input *input, void *nil);
 
 int					parse_module(t_input *input, void *fmt);
 int					integer_module(t_input *input, va_list *vaptr);
+int					format_module(t_input *input, char *str);
 int					memes_module(t_input *input, va_list *ptr);
 
 /*
