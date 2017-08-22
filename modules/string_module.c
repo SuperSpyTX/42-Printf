@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 13:23:30 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/22 00:48:53 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/22 15:33:41 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void				write_conv(t_input *input, void *conv)
 {
-	char				ch;
+	int					ch;
 	char				*str;
 
 	ch = 0;
 	str = 0;
 	if (CMP(input->type, 'c'))
-		ch = (char)conv;
+		ch = (int)conv;
 	else
 		str = (char*)conv;
 	if (CMP(input->type, 'c'))
@@ -80,14 +80,12 @@ char				*write_wconv(t_input *input, void *conv)
 	if (CMP(input->type, 'C'))
 		result = convert_wchar(ch);
 	else if (str)
-	{
 		while (*str != '\0')
 		{
 			tmp = convert_wchar(*str++);
 			result = ft_expandwrite(tmp, ft_strlen(tmp), result, &bsize);
 			free(tmp);
 		}
-	}
 	else
 		result = ft_strdup("(null)");
 	return (result);
@@ -97,9 +95,9 @@ int					string_aliasing(t_input *input)
 {
 	if (CMP(input->type, '%'))
 	{
-		input->type = 'c';
+		input->type = 's';
 		input->precision = INT_MIN;
-		write_conv(input, (void*)(intptr_t)'%');
+		write_conv(input, "%");
 		return (1);
 	}
 	if (CMP(input->type, 's') && CMP(input->length, 'l'))
@@ -119,7 +117,8 @@ int					string_module(t_input *input, va_list *ptr)
 		input->type = 's';
 		write_conv(input, result);
 		free(result);
-	} else if (CMP(input->type, 'c') || CMP(input->type, 's'))
+	}
+	else if (CMP(input->type, 'c') || CMP(input->type, 's'))
 		write_conv(input, va_arg(*ptr, void*));
 	return (1);
 }

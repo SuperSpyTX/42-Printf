@@ -16,11 +16,11 @@ divert(-1)
 
 define(MK_NAME, libftprintf)
 define(MK_ISLIB, 1)
-define(MK_INCLUDE_DIRS, includes libft/includes)
-define(MK_SRC_DIRS, modules src libft)
-define(MK_DEBUG, 1)
+define(MK_INCLUDE_DIRS, includes)
+define(MK_SRC_DIRS, modules src)
+define(MK_DEBUG, 0)
 
-define(MK_LIBFT_LITE, 0)
+define(MK_LIBFT_LITE, 1)
 define(MK_LIBFT, 0)
 define(MK_LIBFT_REMAKE_ON_RE, 0)
 define(MK_LIBFT_DIR, libft)
@@ -45,7 +45,7 @@ LIBFT_BIN = $(LIBFT_DIR)MK_LIBFT_BIN) divert(0)
 CFLAGS = ifelse(MK_DEBUG, 1,-g) ifelse(MK_AUTO_ISLINUX, 1,-fPIC )-Wall -Werror -Wextra MK_AUTO_INCLUDE_DIR dnl
 ifelse(MK_LIBFT, 1,-I MK_LIBFT_DIR/MK_LIBFT_INCLUDE_DIR)
 
-SRC = MK_AUTO_SRC ifelse(MK_LIBFT_LITE, 1, esyscmd(bash -c 'cat symbolincludes.txt | sed -e "s/$/ \\\/g"'))
+SRC = MK_AUTO_SRC ifelse(MK_LIBFT_LITE, 1,esyscmd(bash -c 'cat symbolincludes.txt | sed -e "s/$/ \\\/g"'))
 OBJ = $(subst .c,.o, $(SRC))
 
 # ------------------- Targets ----------------------- #
@@ -75,11 +75,14 @@ fclean: clean
 
 re: ifelse(MK_LIBFT_REMAKE_ON_RE, 1,f)clean all dnl
 
+ifelse(MK_DEBUG, 1,
 test: $(NAME)
 	gcc -Iincludes -Ilibft/includes test.c $(NAME) $(LIBFT_BIN) -o testprog
 	./testprog
-
-ifelse(MK_LIBFT_LITE, 0,
-symbolmaker: $(NAME)
-	find libft -type f -name "*.c" | grep -E "`$$'(nm -g libftprintf.a | grep -oE "(ft_.+)" | grep -v ft_printf | tr '\n' '|'| sed -e 's/.`$$'//g')" > symbolincludes.txt,
-)
+symbolmaker:
+	$(MAKE) re
+	find libft -type f -name "*.c" | grep -E "`$$'(nm -g libftprintf.a | grep -oE "(ft_.+)" | grep -v ft_printf | tr '\n' '|'| sed -e 's/.`$$'//g')" > symbolincludes.txt
+	m4make re
+	find libft -type f -name "*.c" | grep -E "`$$'(nm -g libftprintf.a | grep -oE "(ft_.+)" | grep -v ft_printf | tr '\n' '|'| sed -e 's/.`$$'//g')" > symbolincludes.txt
+	cat symbolincludes.txt
+,)

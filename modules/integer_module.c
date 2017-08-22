@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/31 14:23:49 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/18 13:17:01 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/22 15:56:40 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,11 @@ int					integer_conv(t_input *input, va_list ptr,
 		input->length_extended = 4;
 		module_call(FORMATMODULE_FORMAT, input, buffer + 1);
 	}
+	else if (buffer[0] == '0' && input->precision != INT_MIN)
+		module_call(FORMATMODULE_FORMAT, input, "");
 	else
 		module_call(FORMATMODULE_FORMAT, input, buffer);
 	free(buffer);
-	//write_module(buffer, 1);
 	return (1);
 }
 
@@ -79,16 +80,22 @@ void				aliasing(t_input *input)
 	{
 		input->length = 'l';
 		input->type = 'x';
+		input->error = -9;
 		input->flag_alt_mode = 1;
 		input->length_extended = 0;
+	}
+	else if (CMP(input->type, 'U'))
+	{
+		input->length = 'l';
+		input->type = 'u';
 	}
 }
 
 int					integer_module(t_input *input, va_list *ptr)
 {
 	aliasing(input);
-	if (CMP(input->type, 'd') || CMP(input->type, 'u')
-			|| CMP(input->type, 'i'))
+	if (LC(input->type, 'd') || LC(input->type, 'u')
+			|| LC(input->type, 'i'))
 		return (integer_conv(input, *ptr, 10, "0123456789abcdef"));
 	else if (CMP(input->type, 'x'))
 		return (integer_conv(input, *ptr, 16, "0123456789abcdef"));
@@ -96,5 +103,5 @@ int					integer_module(t_input *input, va_list *ptr)
 		return (integer_conv(input, *ptr, 16, "0123456789ABCDEF"));
 	else if (CMP(input->type, 'o'))
 		return (integer_conv(input, *ptr, 8, "0123456789abcdef"));
-	return (0);
+	return (1);
 }

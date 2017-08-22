@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/25 14:37:15 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/22 00:30:36 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/22 15:55:22 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,19 @@ int				main(int argc, char **argv)
 	//ft_printf("%5%");
 	//ft_printf("|%5.2x|\n", 5427);
 	//printf("|%5.2x|", 5427);
-	ft_printf("FT: |%5.2s is a string.|\n", "");
-	printf("PF: |%5.2s is a string.|\n", "");
+	//ft_printf("FT: |%5.2s is a string.|\n", "");
+	//printf("PF: |%5.2s is a string.|\n", "");
+	//ft_printf("FT|%#x|\n", 0);
+	//printf("PF|%#x|\n", 0);
+	//ft_printf("|%#x|", 0);
+	//ft_printf("@moulitest: %5.d %5.0d", 0, 0);
+	//ft_printf("|%U|", 4294967296);
+	//ft_printf("2c:|%2c|\n", 0);
+	//ft_printf("+d:|%+d|\n", 0);
+	int p = 0;
+	ft_printf("%p", p);
+	//ft_printf("3.2d:|%3.2d|\n", 0);
+	//printf("3.2d:|%3.2d|", 0);
 	//int nb2 = 42;
 	//ft_printf("LALALALALAL\n%n", &nb2);
 	//ft_printf("%d\n", nb2);

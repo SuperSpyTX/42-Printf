@@ -1,0 +1,11 @@
+libft/ft_memcpy.c
+libft/ft_ltostr_base.c
+libft/ft_expandwrite.c
+libft/ft_strdup.c
+libft/ft_strlen.c
+libft/ft_strsub.c
+libft/ft_expandpad.c
+libft/ft_strnew.c
+libft/ft_memalloc.c
+libft/ft_memset.c
+libft/ft_strchr.c

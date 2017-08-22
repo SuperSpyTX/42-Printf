@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 16:42:25 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/22 00:50:46 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/22 15:21:32 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int					bufferwrite_module_write(t_input *input, char *write)
 
 int					bufferwrite_module_flush(t_input *input, void *nil)
 {
-	int 				size;
+	int					size;
 
 	size = 0;
 	(void)input;

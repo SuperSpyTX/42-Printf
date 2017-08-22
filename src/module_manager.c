@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/18 17:16:16 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/21 23:17:47 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/22 15:34:22 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_module				*g_modules;
 
-void					module_init()
+void					module_init(void)
 {
 	if (!g_modules)
 	{
@@ -28,7 +28,7 @@ void					module_init()
 	}
 }
 
-void					module_init2()
+void					module_init2(void)
 {
 	MULTIREG('d', (t_module)integer_module);
 	MULTIREG('i', (t_module)integer_module);
@@ -45,7 +45,7 @@ void					module_init2()
 int						module_call(char key, t_input *input, void *args)
 {
 	if (!g_modules[(int)key])
-		return (0);
+		return (-1);
 	return (g_modules[(int)key](input, args));
 }
 
@@ -65,7 +65,7 @@ void					write_module(char *str, int freeme, int writenull)
 		{
 			if (freeme)
 				free(str);
-			return;
+			return ;
 		}
 	}
 	module_call(WRITEMODULE_WRITE, 0, str);

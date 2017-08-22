@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/25 14:27:21 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/21 23:07:34 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/22 15:23:08 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ void				check_widthcision(t_input *input, char **fmt)
 	fc = **fmt;
 	while ((fc >= '0' && fc <= '9') || fc == '.' || fc == '*')
 	{
-		if (fc == '*')
-			input->asterisks += 1;
+		input->asterisks += (fc == '*' ? 1 : 0);
 		if (fc == '.')
 		{
 			input->width = tmp;
@@ -98,7 +97,6 @@ int					parse_module(t_input *input, void *ptr)
 	input->width = INT_MIN;
 	input->precision = INT_MIN;
 	input->asterisks = 0;
-	input->module = 0;
 	fmt = (char*)ptr + 1;
 	check_flags(input, &fmt);
 	check_widthcision(input, &fmt);
@@ -109,7 +107,7 @@ int					parse_module(t_input *input, void *ptr)
 		{
 			input->type = *alpha;
 			input->error = 0;
-			break;
+			break ;
 		}
 		alpha += 1;
 	}

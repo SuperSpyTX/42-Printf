@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/15 22:43:59 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/22 00:32:19 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/22 15:56:50 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@ char				*prefix(t_input *in, char *str, char *result, int *bsize)
 	char				*tmp;
 
 	tmp = 0;
+	if ((in->flag_alt_mode && LC(in->type, 'x') && ft_strlen(str) == 0)
+			|| (*str == '0' && !LC(in->type, 'd')
+				&& in->error != -9) || LC(in->type, 'u'))
+		return (ft_expandwrite("", 0, result, bsize));
 	if (in->length_extended == 4)
 		result = ft_expandwrite("-", 1, result, bsize);
 	else if (in->module == 'i' && in->flag_all_signs_char != 0)
@@ -83,13 +87,14 @@ char				*width(t_input *in, char *str, char *result, int *bsize)
 	int					length;
 
 	length = ft_strlen(str);
-	if (length > 0)
+	if (length > 0 || CMP(in->type, 'c')
+			|| (in->precision != INT_MIN && CMP(in->module, 'i')))
 		length = prefixstr(in, str)
+			+ (CMP(in->type, 'c') && length < 1 ? 1 : 0)
 			+ (((in->precision != INT_MIN && in->module != 'i') ||
 				(in->module == 'i' && in->precision > 0)) ? in->precision : 0)
 			+ length;
 	width = in->width - length;
-	//printf("W: %d %d %d %d\n", width, in->width, length, in->precision);
 	if (width > 0 && !in->flag_left_justify
 			&& in->precision == INT_MIN
 			&& in->flag_zero_pad && in->module == 'i')
@@ -117,12 +122,15 @@ int					format_module(t_input *input, char *str)
 		result = precise(input, str, result, &bsize);
 		result = width(input, str, result, &bsize);
 	}
+	else if (CMP(input->type, 'c') && ft_strlen(str) == 0)
+		result = width(input, str, result, &bsize);
 	else
 	{
 		result = width(input, str, result, &bsize);
 		result = precise(input, str, result, &bsize);
 	}
 	result = ft_expandwrite("\0", 1, result, &bsize);
-	write_module(result, 1, (input->type == 'c' ? 1 : 0));
+	write_module(result, 1, 0);
+	(ft_strlen(str) == 0 && LC(input->type, 'c') ? write_module("", 0, 1) : 0);
 	return (1);
 }

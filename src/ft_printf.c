@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/18 11:15:43 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/22 00:36:49 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/22 15:35:04 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,6 @@ t_input				*search(char *fmt)
 	return (0);
 }
 
-void				onpoint_isa_debug(t_input *iflag)
-{
-	printf("========= FLAG PARSE ==========\n");
-	printf("original: %s\n", ft_strsub(iflag->original, 0, iflag->input_length + 1));
-	printf("input_length: %d\n", iflag->input_length);
-	printf("error: %d\n", iflag->error);
-	printf("flag_left_justify: %d\n", iflag->flag_left_justify);
-	printf("flag_alt_mode: %d\n", iflag->flag_alt_mode);
-	printf("flag_all_signs_char: \"%c\"\n", iflag->flag_all_signs_char);
-	printf("flag_zero_pad: %d\n", iflag->flag_zero_pad);
-	printf("asterisks: %d\n", iflag->asterisks);
-	printf("width: %d\n", iflag->width);
-	printf("precision: %d\n", iflag->precision);
-	printf("length: %c\n", iflag->length);
-	printf("length_extended: %d\n", iflag->length_extended);
-	printf("type: %c\n", iflag->type);
-	printf("======= End Flag Parse ========\n");
-}
-
 int					ft_printf(const char *fmt, ...)
 {
 	va_list				start;
@@ -64,12 +45,11 @@ int					ft_printf(const char *fmt, ...)
 	{
 		write_module(ft_strsub(current, 0, (iflag->original - current)), 1, 0);
 		module_call(ASTERISKMODULE_PARSE, iflag, &start);
-//		onpoint_isa_debug(iflag);
-		if (iflag->error || !module_call(iflag->type, iflag, &start))
+		if (iflag->error || module_call(iflag->type, iflag, &start) == 0)
 		{
 			write_flush(-1);
 			free(iflag);
-			return (-1);
+			return (0);
 		}
 		current += (iflag->original - current) + iflag->input_length + 1;
 		free(iflag);
