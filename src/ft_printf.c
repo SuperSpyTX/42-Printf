@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/18 11:15:43 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/17 23:33:41 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/22 00:36:49 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void				onpoint_isa_debug(t_input *iflag)
 	printf("flag_alt_mode: %d\n", iflag->flag_alt_mode);
 	printf("flag_all_signs_char: \"%c\"\n", iflag->flag_all_signs_char);
 	printf("flag_zero_pad: %d\n", iflag->flag_zero_pad);
+	printf("asterisks: %d\n", iflag->asterisks);
 	printf("width: %d\n", iflag->width);
 	printf("precision: %d\n", iflag->precision);
 	printf("length: %c\n", iflag->length);
@@ -61,18 +62,19 @@ int					ft_printf(const char *fmt, ...)
 	va_start(start, fmt);
 	while ((iflag = search(current)) != 0)
 	{
-	//	onpoint_isa_debug(iflag);
-		write_module(ft_strsub(current, 0, (iflag->original - current)), 1);
+		write_module(ft_strsub(current, 0, (iflag->original - current)), 1, 0);
+		module_call(ASTERISKMODULE_PARSE, iflag, &start);
+//		onpoint_isa_debug(iflag);
 		if (iflag->error || !module_call(iflag->type, iflag, &start))
 		{
-			write_flush(1);
+			write_flush(-1);
 			free(iflag);
 			return (-1);
 		}
 		current += (iflag->original - current) + iflag->input_length + 1;
 		free(iflag);
 	}
-	write_module(current, 0);
+	write_module(current, 0, 0);
 	va_end(start);
 	return (write_flush(0));
 }

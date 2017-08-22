@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/25 14:27:21 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/17 16:12:59 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/21 23:07:34 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ void				check_widthcision(t_input *input, char **fmt)
 
 	tmp = 0;
 	fc = **fmt;
-	while ((fc >= '0' && fc <= '9') || fc == '.')
+	while ((fc >= '0' && fc <= '9') || fc == '.' || fc == '*')
 	{
+		if (fc == '*')
+			input->asterisks += 1;
 		if (fc == '.')
 		{
 			input->width = tmp;
@@ -65,7 +67,7 @@ void				check_widthcision(t_input *input, char **fmt)
 	input->width == INT_MIN ? input->width = tmp : 0;
 }
 
-void				check_length(t_input *input, char **fmt)
+void				check_length_hijacked(t_input *input, char **fmt)
 {
 	char				fc;
 
@@ -80,6 +82,11 @@ void				check_length(t_input *input, char **fmt)
 		*fmt += input->length_extended ? 2 : 1;
 		fc = **fmt;
 	}
+	if (**fmt == '*')
+	{
+		input->asterisks += 1;
+		*fmt += 1;
+	}
 }
 
 int					parse_module(t_input *input, void *ptr)
@@ -87,14 +94,15 @@ int					parse_module(t_input *input, void *ptr)
 	char				*alpha;
 	char				*fmt;
 
-	alpha = "sSpdDioOuUxXcC%";
+	alpha = "sSpdDioOuUxXcCn%";
 	input->width = INT_MIN;
 	input->precision = INT_MIN;
+	input->asterisks = 0;
 	input->module = 0;
 	fmt = (char*)ptr + 1;
 	check_flags(input, &fmt);
 	check_widthcision(input, &fmt);
-	check_length(input, &fmt);
+	check_length_hijacked(input, &fmt);
 	while (*alpha != '\0')
 	{
 		if (*alpha == *fmt)

@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/18 17:16:16 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/14 23:41:05 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/21 23:17:47 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,23 @@ void					module_init()
 		g_modules[WRITEMODULE_FLUSH] = (t_module)bufferwrite_module_flush;
 		g_modules[PARSEMODULE_PARSE] = (t_module)parse_module;
 		g_modules[FORMATMODULE_FORMAT] = (t_module)format_module;
+		g_modules[ASTERISKMODULE_PARSE] = (t_module)asterisks_module;
 		module_init2();
 	}
 }
 
 void					module_init2()
 {
-	g_modules['d'] = (t_module)integer_module;
-	g_modules['D'] = (t_module)integer_module;
-	g_modules['i'] = (t_module)integer_module;
-	g_modules['I'] = (t_module)integer_module;
-	g_modules['x'] = (t_module)integer_module;
-	g_modules['X'] = (t_module)integer_module;
-	g_modules['u'] = (t_module)integer_module;
-	g_modules['U'] = (t_module)integer_module;
-	g_modules['o'] = (t_module)integer_module;
-	g_modules['O'] = (t_module)integer_module;
-	g_modules['%'] = (t_module)memes_module;
+	MULTIREG('d', (t_module)integer_module);
+	MULTIREG('i', (t_module)integer_module);
+	MULTIREG('x', (t_module)integer_module);
+	MULTIREG('u', (t_module)integer_module);
+	MULTIREG('o', (t_module)integer_module);
+	MULTIREG('p', (t_module)integer_module);
+	MULTIREG('s', (t_module)string_module);
+	MULTIREG('c', (t_module)string_module);
+	g_modules['n'] = (t_module)memorywrite_module;
+	g_modules['%'] = (t_module)string_module;
 }
 
 int						module_call(char key, t_input *input, void *args)
@@ -49,13 +49,25 @@ int						module_call(char key, t_input *input, void *args)
 	return (g_modules[(int)key](input, args));
 }
 
-int						write_flush(int error)
+int						write_flush(int code)
 {
-	return (module_call(WRITEMODULE_FLUSH, 0, (error ? (void*)-1 : 0)));
+	return (module_call(WRITEMODULE_FLUSH, 0, (void*)(intptr_t)code));
 }
 
-void					write_module(char *str, int freeme)
+void					write_module(char *str, int freeme, int writenull)
 {
+	int					len;
+
+	if (!writenull)
+	{
+		len = ft_strlen(str);
+		if (len == 0)
+		{
+			if (freeme)
+				free(str);
+			return;
+		}
+	}
 	module_call(WRITEMODULE_WRITE, 0, str);
 	if (freeme)
 		free(str);

@@ -17,11 +17,11 @@ divert(-1)
 define(MK_NAME, libftprintf)
 define(MK_ISLIB, 1)
 define(MK_INCLUDE_DIRS, includes libft/includes)
-define(MK_SRC_DIRS, modules src)
+define(MK_SRC_DIRS, modules src libft)
 define(MK_DEBUG, 1)
 
 define(MK_LIBFT_LITE, 0)
-define(MK_LIBFT, 1)
+define(MK_LIBFT, 0)
 define(MK_LIBFT_REMAKE_ON_RE, 0)
 define(MK_LIBFT_DIR, libft)
 define(MK_LIBFT_INCLUDE_DIR, includes)
@@ -74,6 +74,10 @@ fclean: clean
 	)dnl
 
 re: ifelse(MK_LIBFT_REMAKE_ON_RE, 1,f)clean all dnl
+
+test: $(NAME)
+	gcc -Iincludes -Ilibft/includes test.c $(NAME) $(LIBFT_BIN) -o testprog
+	./testprog
 
 ifelse(MK_LIBFT_LITE, 0,
 symbolmaker: $(NAME)

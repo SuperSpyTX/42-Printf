@@ -6,13 +6,13 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/15 22:43:59 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/17 23:38:19 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/22 00:32:19 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char				*prefix(t_input *in, char *result, int *bsize)
+char				*prefix(t_input *in, char *str, char *result, int *bsize)
 {
 	char				*tmp;
 
@@ -25,21 +25,26 @@ char				*prefix(t_input *in, char *result, int *bsize)
 		tmp[0] = in->flag_all_signs_char;
 		result = ft_expandwrite(tmp, 1, result, bsize);
 	}
-	else if (in->module == 'i' && in->flag_alt_mode && LC(in->type, 'x'))
+	else if (in->module == 'i' && in->flag_alt_mode == 1 && CMP(in->type, 'x'))
 		result = ft_expandwrite("0x", 2, result, bsize);
+	else if (in->module == 'i' && in->flag_alt_mode == 1 && CMP(in->type, 'X'))
+		result = ft_expandwrite("0X", 2, result, bsize);
+	else if (in->module == 'i' && in->flag_alt_mode == 1
+			&& CMP(in->type, 'o') && *str != '0')
+		result = ft_expandwrite("0", 1, result, bsize);
 	if (tmp)
 		free(tmp);
 	return (result);
 }
 
-int					prefixstr(t_input *in)
+int					prefixstr(t_input *in, char *str)
 {
 	int					rsize;
 	char				*result;
 
 	result = 0;
 	rsize = 0;
-	result = prefix(in, result, &rsize);
+	result = prefix(in, str, result, &rsize);
 	free(result);
 	return (rsize);
 }
@@ -55,21 +60,19 @@ char				*precise(t_input *in, char *str, char *result, int *bsize)
 	{
 		if (precision <= 0 && in->module != 'i')
 		{
-		//	printf("Condition 1\n");
-			result = prefix(in, result, bsize);
+			result = prefix(in, str, result, bsize);
 			length = precision + length;
 		}
 		else if (precision > 0 && in->module == 'i')
 		{
-		//	printf("Condition 2\n");
-			result = prefix(in, result, bsize);
+			result = prefix(in, str, result, bsize);
 			result = ft_expandpad('0', precision, result, bsize);
 		}
 		else
-			result = prefix(in, result, bsize);
+			result = prefix(in, str, result, bsize);
 	}
-	else
-		result = prefix(in, result, bsize);
+	else if (in->error != 3)
+		result = prefix(in, str, result, bsize);
 	result = ft_expandwrite(str, length, result, bsize);
 	return (result);
 }
@@ -79,13 +82,22 @@ char				*width(t_input *in, char *str, char *result, int *bsize)
 	int					width;
 	int					length;
 
-	length = prefixstr(in) + (in->precision > 0 ? in->precision : 0)
-			+ ft_strlen(str);
+	length = ft_strlen(str);
+	if (length > 0)
+		length = prefixstr(in, str)
+			+ (((in->precision != INT_MIN && in->module != 'i') ||
+				(in->module == 'i' && in->precision > 0)) ? in->precision : 0)
+			+ length;
 	width = in->width - length;
+	//printf("W: %d %d %d %d\n", width, in->width, length, in->precision);
 	if (width > 0 && !in->flag_left_justify
 			&& in->precision == INT_MIN
 			&& in->flag_zero_pad && in->module == 'i')
+	{
+		result = prefix(in, str, result, bsize);
+		in->error = 3;
 		result = ft_expandpad('0', width, result, bsize);
+	}
 	else if (width > 0)
 		result = ft_expandpad(' ', width, result, bsize);
 	return (result);
@@ -111,6 +123,6 @@ int					format_module(t_input *input, char *str)
 		result = precise(input, str, result, &bsize);
 	}
 	result = ft_expandwrite("\0", 1, result, &bsize);
-	write_module(result, 1);
+	write_module(result, 1, (input->type == 'c' ? 1 : 0));
 	return (1);
 }

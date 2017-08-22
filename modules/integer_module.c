@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/31 14:23:49 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/17 20:23:08 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/18 13:17:01 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,34 @@ int					integer_conv(t_input *input, va_list ptr,
 	return (1);
 }
 
-int					integer_module(t_input *input, va_list *vaptr)
+void				aliasing(t_input *input)
 {
-	if (CMP(input->type, 'd') || CMP(input->type, 'D')
-			|| CMP(input->type, 'u') || CMP(input->type, 'u')
-			|| CMP(input->type, 'i') || CMP(input->type, 'I'))
-		return (integer_conv(input, *vaptr, 10, "0123456789abcdef"));
+	if (CMP(input->type, 'D'))
+	{
+		input->length = 'l';
+		input->type = 'd';
+		input->length_extended = 0;
+	}
+	else if (CMP(input->type, 'p'))
+	{
+		input->length = 'l';
+		input->type = 'x';
+		input->flag_alt_mode = 1;
+		input->length_extended = 0;
+	}
+}
+
+int					integer_module(t_input *input, va_list *ptr)
+{
+	aliasing(input);
+	if (CMP(input->type, 'd') || CMP(input->type, 'u')
+			|| CMP(input->type, 'i'))
+		return (integer_conv(input, *ptr, 10, "0123456789abcdef"));
 	else if (CMP(input->type, 'x'))
-		return (integer_conv(input, *vaptr, 16, "0123456789abcdef"));
+		return (integer_conv(input, *ptr, 16, "0123456789abcdef"));
 	else if (CMP(input->type, 'X'))
-		return (integer_conv(input, *vaptr, 16, "0123456789ABCDEF"));
+		return (integer_conv(input, *ptr, 16, "0123456789ABCDEF"));
 	else if (CMP(input->type, 'o'))
-		return (integer_conv(input, *vaptr, 8, "0123456789abcdef"));
+		return (integer_conv(input, *ptr, 8, "0123456789abcdef"));
 	return (0);
 }
