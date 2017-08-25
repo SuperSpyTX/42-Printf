@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 13:23:30 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/22 15:33:41 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/24 22:41:19 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ char				*write_wconv(t_input *input, void *conv)
 		}
 	else
 		result = ft_strdup("(null)");
+	input->output_length = bsize;
 	return (result);
 }
 

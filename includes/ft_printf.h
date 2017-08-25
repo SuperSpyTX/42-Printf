@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/18 10:26:16 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/22 16:06:45 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/24 22:40:20 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct		s_input
 {
 	int				error;
 	int				input_length;
+	int				output_length;
 	char			module;
 	char			*original;
 

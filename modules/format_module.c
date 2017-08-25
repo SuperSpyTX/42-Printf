@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/15 22:43:59 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/22 15:56:50 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/24 22:43:04 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char				*precise(t_input *in, char *str, char *result, int *bsize)
 	int					precision;
 	int					length;
 
-	length = ft_strlen(str);
+	length = in->output_length;
 	precision = (in->precision == INT_MIN ? INT_MIN : in->precision);
 	if (precision != INT_MIN)
 	{
@@ -86,7 +86,7 @@ char				*width(t_input *in, char *str, char *result, int *bsize)
 	int					width;
 	int					length;
 
-	length = ft_strlen(str);
+	length = in->output_length;
 	if (length > 0 || CMP(in->type, 'c')
 			|| (in->precision != INT_MIN && CMP(in->module, 'i')))
 		length = prefixstr(in, str)
@@ -108,29 +108,31 @@ char				*width(t_input *in, char *str, char *result, int *bsize)
 	return (result);
 }
 
-int					format_module(t_input *input, char *str)
+int					format_module(t_input *in, char *str)
 {
 	char				*result;
 	int					bsize;
 
 	result = 0;
 	bsize = 0;
-	if (input->precision != INT_MIN)
-		input->precision -= ft_strlen(str);
-	if (input->flag_left_justify)
+	if (!in->output_length)
+		in->output_length = ft_strlen(str);
+	if (in->precision != INT_MIN)
+		in->precision -= in->output_length;
+	if (in->flag_left_justify)
 	{
-		result = precise(input, str, result, &bsize);
-		result = width(input, str, result, &bsize);
+		result = precise(in, str, result, &bsize);
+		result = width(in, str, result, &bsize);
 	}
-	else if (CMP(input->type, 'c') && ft_strlen(str) == 0)
-		result = width(input, str, result, &bsize);
+	else if (CMP(in->type, 'c') && in->output_length == 0)
+		result = width(in, str, result, &bsize);
 	else
 	{
-		result = width(input, str, result, &bsize);
-		result = precise(input, str, result, &bsize);
+		result = width(in, str, result, &bsize);
+		result = precise(in, str, result, &bsize);
 	}
 	result = ft_expandwrite("\0", 1, result, &bsize);
 	write_module(result, 1, 0);
-	(ft_strlen(str) == 0 && LC(input->type, 'c') ? write_module("", 0, 1) : 0);
+	(in->output_length == 0 && LC(in->type, 'c') ? write_module("", 0, 1) : 0);
 	return (1);
 }
