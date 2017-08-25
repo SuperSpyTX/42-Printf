@@ -6,7 +6,7 @@
 /*   By: jkrause <jkrause@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/31 14:23:49 by jkrause           #+#    #+#             */
-/*   Updated: 2017/08/22 15:56:40 by jkrause          ###   ########.fr       */
+/*   Updated: 2017/08/24 19:08:18 by jkrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int					integer_module(t_input *input, va_list *ptr)
 		return (integer_conv(input, *ptr, 16, "0123456789abcdef"));
 	else if (CMP(input->type, 'X'))
 		return (integer_conv(input, *ptr, 16, "0123456789ABCDEF"));
-	else if (CMP(input->type, 'o'))
+	else if (LC(input->type, 'o'))
 		return (integer_conv(input, *ptr, 8, "0123456789abcdef"));
 	return (1);
 }
