@@ -9,3 +9,4 @@ testprog
 *.dSYM/
 libft/includes
 Session.vim
+libft-local
